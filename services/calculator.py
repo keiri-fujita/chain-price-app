@@ -207,7 +207,7 @@ def calculate_chain_price(
     rounded_cost = round_up_to_10(total_cost)
 
     # 税抜き上代
-    price_ex_tax = floor_yen(rounded_cost * markup_rate)
+    price_ex_tax = int(math.ceil((rounded_cost * markup_rate) / 100) * 100)
 
     # 税込み上代
     price_in_tax = floor_yen(price_ex_tax * tax_rate)
