@@ -52,6 +52,48 @@
         {% endif %}
       </div>
 
+{% if show_debug and result and result.debug_details %}
+  <section class="card" style="margin-top: 16px;">
+    <h2 class="card-title">計算内訳（確認用）</h2>
+
+    <div class="form-grid">
+      <div><strong>仕入先:</strong> {{ result.debug_details.supplier }}</div>
+      <div><strong>素材:</strong> {{ result.debug_details.material }}</div>
+      <div><strong>チェーン種類:</strong> {{ result.debug_details.display_name }}</div>
+
+      <div><strong>g/cm:</strong> {{ result.debug_details.weight_per_cm }}</div>
+      <div><strong>全長:</strong> {{ result.debug_details.length_cm }}</div>
+      <div><strong>相場:</strong> {{ result.debug_details.market_price }}</div>
+
+      <div><strong>工賃ランク:</strong> {{ result.debug_details.labor_rank }}</div>
+      <div><strong>工賃:</strong> {{ result.debug_details.labor_cost }}</div>
+
+      <div><strong>引き輪:</strong> {{ result.debug_details.clasp_size }}</div>
+      <div><strong>引き輪価格:</strong> {{ result.debug_details.clasp_price }}</div>
+
+      <div><strong>プレート:</strong> {{ result.debug_details.plate_size }}</div>
+      <div><strong>プレート価格:</strong> {{ result.debug_details.plate_price }}</div>
+
+      <div><strong>スライド金具:</strong> {{ result.debug_details.slide_size }}</div>
+      <div><strong>スライド金具価格:</strong> {{ result.debug_details.slide_price }}</div>
+
+      <div><strong>チェーン本体下代:</strong> {{ result.debug_details.chain_cost }}</div>
+      <div><strong>パーツ合計:</strong> {{ result.debug_details.parts_total }}</div>
+      <div><strong>最終下代:</strong> {{ result.debug_details.total_cost }}</div>
+      <div><strong>下代丸め後:</strong> {{ result.debug_details.rounded_cost }}</div>
+
+      <div><strong>掛率:</strong> {{ result.debug_details.markup_rate }}</div>
+      <div><strong>税抜上代（丸め前）:</strong> {{ result.debug_details.price_ex_tax_raw }}</div>
+      <div><strong>税抜上代（丸め後）:</strong> {{ result.debug_details.price_ex_tax_rounded }}</div>
+
+      <div><strong>消費税率:</strong> {{ result.debug_details.tax_rate }}</div>
+      <div><strong>税込上代:</strong> {{ result.debug_details.price_in_tax_final }}</div>
+
+      <div><strong>暗号化下代:</strong> {{ result.debug_details.encoded_cost }}</div>
+    </div>
+  </section>
+{% endif %}      
+
       <div class="form-row">
         <label for="material">素材</label>
         <select id="material" name="material" onchange="refreshOptions()">

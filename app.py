@@ -106,6 +106,20 @@ def logout():
     return redirect(url_for("login"))
 
 
+@app.route("/debug-on")
+@login_required
+def debug_on():
+    session["is_admin_debug"] = True
+    return redirect(url_for("calculator"))
+
+
+@app.route("/debug-off")
+@login_required
+def debug_off():
+    session["is_admin_debug"] = False
+    return redirect(url_for("calculator"))
+
+
 @app.route("/calculator", methods=["GET", "POST"])
 @login_required
 def calculator():
@@ -226,6 +240,8 @@ def calculator():
     market_map["Pt850"] = pure_market["pure_pt"]
     market_map["K18YG"] = pure_market["pure_au"]
 
+    show_debug = session.get("is_admin_debug", False)
+
     return render_template(
         "calculator.html",
         form_data=form_data,
@@ -238,6 +254,7 @@ def calculator():
         plate_options=plate_options,
         slide_options=slide_options,
         market_map=market_map,
+        show_debug=show_debug,
     )
 
 
