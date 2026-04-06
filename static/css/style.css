@@ -443,3 +443,7 @@ select:focus {
     text-align: left;
   }
 }
+
+.site-title {
+  color: red !important;
+}
