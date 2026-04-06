@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}ログイン | チェーン価格計算{% endblock %}
+
+{% block content %}
+<div class="center-wrap">
+    <section class="card login-card">
+        <h2 class="card-title">ログイン</h2>
+        <p class="subtext">パスワードを入力してください。</p>
+
+        {% if error_message %}
+        <div class="alert alert-error">{{ error_message }}</div>
+        {% endif %}
+
+        <form method="post" class="form-grid">
+            <div class="form-row">
+                <label for="password">パスワード</label>
+                <input id="password" name="password" type="password" autocomplete="current-password" required />
+            </div>
+
+            <div class="button-row">
+                <button type="submit" class="btn btn-primary">ログイン</button>
+            </div>
+        </form>
+    </section>
+</div>
+{% endblock %}

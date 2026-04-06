@@ -1,0 +1,287 @@
+:root {
+  --bg: #f7f4fb;
+  --card: #ffffff;
+  --border: #e5dbf3;
+  --text: #3c3050;
+  --muted: #7b6e91;
+  --primary: #bca7df;
+  --primary-dark: #9c84c8;
+  --danger-bg: #fdecef;
+  --danger-text: #b1425a;
+  --shadow: 0 8px 24px rgba(95, 74, 135, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family:
+    -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic",
+    "Yu Gothic UI", "Meiryo", sans-serif;
+}
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(247, 244, 251, 0.95);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--border);
+}
+
+.header-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.site-title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.logout-link {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+}
+
+.page-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.center-wrap {
+  min-height: calc(100vh - 120px);
+  display: grid;
+  place-items: center;
+}
+
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 24px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 460px;
+}
+
+.card-title {
+  margin: 0 0 16px;
+  font-size: 22px;
+}
+
+.subtext {
+  margin: 0 0 20px;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.market-bar {
+  position: sticky;
+  top: 73px;
+  z-index: 90;
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow);
+}
+
+.market-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #faf7ff;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 10px 14px;
+}
+
+.market-label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.market-value {
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.layout-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 20px;
+}
+
+.form-grid {
+  display: grid;
+  gap: 16px;
+}
+
+.form-row {
+  display: grid;
+  gap: 8px;
+}
+
+label {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+input,
+select {
+  width: 100%;
+  min-height: 48px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+  padding: 12px 14px;
+  font-size: 16px;
+  color: var(--text);
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary-dark);
+  box-shadow: 0 0 0 4px rgba(188, 167, 223, 0.18);
+}
+
+.button-row {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 18px;
+  border-radius: 12px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 700;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--primary-dark);
+}
+
+.btn-secondary {
+  background: #f3edf9;
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+
+.alert {
+  margin-bottom: 16px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+.alert-error {
+  background: var(--danger-bg);
+  color: var(--danger-text);
+}
+
+.field-error {
+  color: var(--danger-text);
+  font-size: 13px;
+}
+
+.result-card {
+  align-self: start;
+}
+
+.result-block {
+  padding: 16px 0;
+  border-bottom: 1px solid #f0e9f8;
+}
+
+.result-block:last-of-type {
+  border-bottom: none;
+}
+
+.result-label {
+  font-size: 14px;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.result-value {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.2;
+  word-break: break-word;
+}
+
+.encoded-cost {
+  margin-top: 22px;
+  font-size: 14px;
+  color: #aa9bbc;
+  letter-spacing: 0.08em;
+  min-height: 20px;
+}
+
+@media (max-width: 900px) {
+  .layout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .result-value {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-container {
+    padding: 16px;
+  }
+
+  .header-inner {
+    padding: 14px 16px;
+  }
+
+  .site-title {
+    font-size: 20px;
+  }
+
+  .market-bar {
+    top: 65px;
+  }
+
+  .card {
+    padding: 18px;
+    border-radius: 16px;
+  }
+}

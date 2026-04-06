@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}チェーン価格計算{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+
+<body>
+    <header class="site-header">
+        <div class="header-inner">
+            <div>
+                <h1 class="site-title">チェーン価格計算</h1>
+            </div>
+
+            {% if session.get('logged_in') %}
+            <nav>
+                <a class="logout-link" href="{{ url_for('logout') }}">ログアウト</a>
+            </nav>
+            {% endif %}
+        </div>
+    </header>
+
+    <main class="page-container">
+        {% block content %}{% endblock %}
+    </main>
+</body>
+
+</html>
