@@ -43,10 +43,10 @@ class SheetsService:
             client = self._get_client()
             self._spreadsheet = client.open_by_key(self.spreadsheet_id)
         return self._spreadsheet
-    
+
     def _get_worksheet(self, sheet_name: str):
         return self._get_spreadsheet().worksheet(sheet_name)
-    
+
     def _get_records(self, sheet_name: str) -> list[dict[str, Any]]:
         worksheet = self._get_spreadsheet().worksheet(sheet_name)
         records = worksheet.get_all_records()
@@ -93,7 +93,9 @@ class SheetsService:
             "app_settings": self.get_app_settings(),
         }
 
-    def get_all_masters(self, force_refresh: bool = False) -> dict[str, list[dict[str, Any]]]:
+    def get_all_masters(
+        self, force_refresh: bool = False
+    ) -> dict[str, list[dict[str, Any]]]:
         """
         通常はキャッシュを返す。
         TTL切れのときのみAPI再読込。
@@ -134,8 +136,7 @@ class SheetsService:
         return {
             "pure_pt": int(str(pure_pt).replace(",", "")) if pure_pt else None,
             "pure_au": int(str(pure_au).replace(",", "")) if pure_au else None,
-        } 
-
+        }
 
     @staticmethod
     def get_supplier_options(chain_rows: list[dict[str, Any]]) -> list[str]:
