@@ -213,10 +213,18 @@ def calculator():
     # refresh時やGET時は result を出さない
     # ヘッダー表示用の相場
     market_map = {}
+
+    # 既存の market_master 行データはそのまま取得
     for row in market_rows:
         material = str(row.get("material", "")).strip()
         price = row.get("market_price", "")
         market_map[material] = price
+
+    # ▼ 追加：B2/B3 を上書き（純プラチナ・純金）
+    pure_market = sheets.get_pure_market_prices()
+
+    market_map["Pt850"] = pure_market["pure_pt"]
+    market_map["K18YG"] = pure_market["pure_au"]
 
     return render_template(
         "calculator.html",

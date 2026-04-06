@@ -117,6 +117,23 @@ class SheetsService:
                 return self.__class__._cache_data
             raise
 
+    def get_pure_market_prices(self) -> dict[str, int]:
+        """
+        market_master シートの B2 / B3 から
+        純プラチナ / 純金の相場を取得
+        """
+
+        ws = self._get_worksheet(Config.SHEET_MARKET_MASTER)
+
+        pure_pt = ws.acell("B2").value
+        pure_au = ws.acell("B3").value
+
+        return {
+            "pure_pt": int(str(pure_pt).replace(",", "")) if pure_pt else None,
+            "pure_au": int(str(pure_au).replace(",", "")) if pure_au else None,
+        } 
+
+
     @staticmethod
     def get_supplier_options(chain_rows: list[dict[str, Any]]) -> list[str]:
         suppliers = {

@@ -308,8 +308,9 @@ select:invalid {
 
 .field-error {
   color: var(--danger-text);
-  font-size: 13px;
-  line-height: 1.4;
+  font-size: 14px;
+  font-weight: 700;
+  margin-top: 2px;
 }
 
 .result-card {

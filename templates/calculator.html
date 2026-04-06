@@ -5,29 +5,29 @@
 {% block content %}
 <section class="market-bar">
   <div class="market-item">
-    <span class="market-label">Pt850</span>
+    <span class="market-label">Pt</span>
     <span class="market-value">
       {% if market_map.get("Pt850") %}
-        ¥{{ "{:,}".format(market_map.get("Pt850")|int) }}/g
+      ¥{{ "{:,}".format(market_map.get("Pt850")|int) }}/g
       {% else %}
-        -
+      -
       {% endif %}
     </span>
   </div>
   <div class="market-item">
-    <span class="market-label">K18YG</span>
+    <span class="market-label">Au</span>
     <span class="market-value">
       {% if market_map.get("K18YG") %}
-        ¥{{ "{:,}".format(market_map.get("K18YG")|int) }}/g
+      ¥{{ "{:,}".format(market_map.get("K18YG")|int) }}/g
       {% else %}
-        -
+      -
       {% endif %}
     </span>
   </div>
 </section>
 
 {% if errors.get("form") %}
-  <div class="alert alert-error">{{ errors.get("form") }}</div>
+<div class="alert alert-error">{{ errors.get("form") }}</div>
 {% endif %}
 
 <div class="layout-grid">
@@ -42,13 +42,13 @@
         <select id="supplier" name="supplier" onchange="refreshOptions()">
           <option value="">選択してください</option>
           {% for supplier in supplier_options %}
-            <option value="{{ supplier }}" {% if form_data.supplier == supplier %}selected{% endif %}>
-              {{ supplier }}
-            </option>
+          <option value="{{ supplier }}" {% if form_data.supplier==supplier %}selected{% endif %}>
+            {{ supplier }}
+          </option>
           {% endfor %}
         </select>
         {% if errors.get("supplier") %}
-          <div class="field-error">{{ errors.get("supplier") }}</div>
+        <div class="field-error">{{ errors.get("supplier") }}</div>
         {% endif %}
       </div>
 
@@ -57,13 +57,13 @@
         <select id="material" name="material" onchange="refreshOptions()">
           <option value="">選択してください</option>
           {% for material in material_options %}
-            <option value="{{ material }}" {% if form_data.material == material %}selected{% endif %}>
-              {{ material }}
-            </option>
+          <option value="{{ material }}" {% if form_data.material==material %}selected{% endif %}>
+            {{ material }}
+          </option>
           {% endfor %}
         </select>
         {% if errors.get("material") %}
-          <div class="field-error">{{ errors.get("material") }}</div>
+        <div class="field-error">{{ errors.get("material") }}</div>
         {% endif %}
       </div>
 
@@ -72,28 +72,22 @@
         <select id="display_name" name="display_name">
           <option value="">選択してください</option>
           {% for name in chain_options %}
-            <option value="{{ name }}" {% if form_data.display_name == name %}selected{% endif %}>
-              {{ name }}
-            </option>
+          <option value="{{ name }}" {% if form_data.display_name==name %}selected{% endif %}>
+            {{ name }}
+          </option>
           {% endfor %}
         </select>
         {% if errors.get("display_name") %}
-          <div class="field-error">{{ errors.get("display_name") }}</div>
+        <div class="field-error">{{ errors.get("display_name") }}</div>
         {% endif %}
       </div>
 
       <div class="form-row">
         <label for="length_cm">全長（cm）</label>
-        <input
-          id="length_cm"
-          name="length_cm"
-          type="text"
-          inputmode="numeric"
-          value="{{ form_data.length_cm }}"
-          placeholder="例：45"
-        />
+        <input id="length_cm" name="length_cm" type="text" inputmode="numeric" value="{{ form_data.length_cm }}"
+          placeholder="例：45" />
         {% if errors.get("length_cm") %}
-          <div class="field-error">{{ errors.get("length_cm") }}</div>
+        <div class="field-error">{{ errors.get("length_cm") }}</div>
         {% endif %}
       </div>
 
@@ -101,9 +95,9 @@
         <label for="clasp_size">引き輪</label>
         <select id="clasp_size" name="clasp_size">
           {% for item in clasp_options %}
-            <option value="{{ item }}" {% if form_data.clasp_size == item %}selected{% endif %}>
-              {{ item }}
-            </option>
+          <option value="{{ item }}" {% if form_data.clasp_size==item %}selected{% endif %}>
+            {{ item }}
+          </option>
           {% endfor %}
         </select>
       </div>
@@ -112,9 +106,9 @@
         <label for="plate_size">プレート</label>
         <select id="plate_size" name="plate_size">
           {% for item in plate_options %}
-            <option value="{{ item }}" {% if form_data.plate_size == item %}selected{% endif %}>
-              {{ item }}
-            </option>
+          <option value="{{ item }}" {% if form_data.plate_size==item %}selected{% endif %}>
+            {{ item }}
+          </option>
           {% endfor %}
         </select>
       </div>
@@ -123,19 +117,15 @@
         <label for="slide_size">スライド金具</label>
         <select id="slide_size" name="slide_size">
           {% for item in slide_options %}
-            <option value="{{ item }}" {% if form_data.slide_size == item %}selected{% endif %}>
-              {{ item }}
-            </option>
+          <option value="{{ item }}" {% if form_data.slide_size==item %}selected{% endif %}>
+            {{ item }}
+          </option>
           {% endfor %}
         </select>
       </div>
 
       <div class="button-row">
-        <button
-          type="submit"
-          class="btn btn-primary"
-          onclick="setCalculateAction()"
-        >
+        <button type="submit" class="btn btn-primary" onclick="setCalculateAction()">
           計算する
         </button>
         <a href="{{ url_for('calculator') }}" class="btn btn-secondary">リセット</a>
@@ -150,9 +140,9 @@
       <div class="result-label">税抜き上代</div>
       <div class="result-value">
         {% if result %}
-          {{ result.price_ex_tax }}
+        {{ result.price_ex_tax }}
         {% else %}
-          -
+        -
         {% endif %}
       </div>
     </div>
@@ -161,16 +151,16 @@
       <div class="result-label">税込み上代</div>
       <div class="result-value">
         {% if result %}
-          {{ result.price_in_tax }}
+        {{ result.price_in_tax }}
         {% else %}
-          -
+        -
         {% endif %}
       </div>
     </div>
 
     <div class="encoded-cost">
       {% if result %}
-        {{ result.encoded_cost }}
+      {{ result.encoded_cost }}
       {% endif %}
     </div>
   </section>
