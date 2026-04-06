@@ -34,6 +34,49 @@ def build_default_form_data() -> dict:
     }
 
 
+def normalize_form_data(raw_form: dict) -> dict:
+    """
+    POST値を受け取り、画面で扱う形に整える。
+    パーツ類は空なら「なし」に寄せる。
+    """
+    return {
+        "supplier": raw_form.get("supplier", "").strip(),
+        "material": raw_form.get("material", "").strip(),
+        "display_name": raw_form.get("display_name", "").strip(),
+        "length_cm": raw_form.get("length_cm", "").strip(),
+        "clasp_size": raw_form.get("clasp_size", "なし").strip() or "なし",
+        "plate_size": raw_form.get("plate_size", "なし").strip() or "なし",
+        "slide_size": raw_form.get("slide_size", "なし").strip() or "なし",
+    }
+
+
+def sanitize_form_data_against_options(
+    form_data: dict,
+    chain_options: list[str],
+    clasp_options: list[str],
+    plate_options: list[str],
+    slide_options: list[str],
+) -> dict:
+    """
+    現在の候補一覧に存在しない選択値を自動で補正する。
+    - チェーン種類: 候補外なら空に戻す
+    - パーツ: 候補外なら「なし」に戻す
+    """
+    if form_data["display_name"] and form_data["display_name"] not in chain_options:
+        form_data["display_name"] = ""
+
+    if form_data["clasp_size"] not in clasp_options:
+        form_data["clasp_size"] = "なし"
+
+    if form_data["plate_size"] not in plate_options:
+        form_data["plate_size"] = "なし"
+
+    if form_data["slide_size"] not in slide_options:
+        form_data["slide_size"] = "なし"
+
+    return form_data
+
+
 @app.route("/")
 def index():
     if session.get(Config.LOGIN_SESSION_KEY):
@@ -80,18 +123,54 @@ def calculator():
     errors = {}
     result = None
 
-    if request.method == "POST":
-        form_data = {
-            "supplier": request.form.get("supplier", "").strip(),
-            "material": request.form.get("material", "").strip(),
-            "display_name": request.form.get("display_name", "").strip(),
-            "length_cm": request.form.get("length_cm", "").strip(),
-            "clasp_size": request.form.get("clasp_size", "なし").strip() or "なし",
-            "plate_size": request.form.get("plate_size", "なし").strip() or "なし",
-            "slide_size": request.form.get("slide_size", "なし").strip() or "なし",
-        }
+    action = "view"
 
-        # バリデーション
+    if request.method == "POST":
+        action = request.form.get("action", "calculate").strip()
+        form_data = normalize_form_data(request.form)
+
+    # まず現在の supplier / material を元に候補一覧を作る
+    selected_supplier = form_data["supplier"]
+    selected_material = form_data["material"]
+
+    chain_options = sheets.get_chain_options(
+        chain_rows,
+        supplier=selected_supplier,
+        material=selected_material,
+    )
+
+    if selected_material:
+        clasp_options = sheets.get_part_options(parts_rows, "引き輪", selected_material)
+        plate_options = sheets.get_part_options(
+            parts_rows, "プレート", selected_material
+        )
+        slide_options = sheets.get_part_options(
+            parts_rows, "スライド金具", selected_material
+        )
+    else:
+        clasp_options = ["なし"]
+        plate_options = ["なし"]
+        slide_options = ["なし"]
+
+    # 念のため「なし」が無ければ補う
+    if "なし" not in clasp_options:
+        clasp_options.insert(0, "なし")
+    if "なし" not in plate_options:
+        plate_options.insert(0, "なし")
+    if "なし" not in slide_options:
+        slide_options.insert(0, "なし")
+
+    # 候補外の選択値を補正
+    form_data = sanitize_form_data_against_options(
+        form_data=form_data,
+        chain_options=chain_options,
+        clasp_options=clasp_options,
+        plate_options=plate_options,
+        slide_options=slide_options,
+    )
+
+    # 計算ボタンを押した時だけバリデーションと計算を行う
+    if request.method == "POST" and action == "calculate":
         if not form_data["supplier"]:
             errors["supplier"] = "仕入先を選択してください。"
 
@@ -131,38 +210,8 @@ def calculator():
                     "計算中にエラーが発生しました。マスタ設定を確認してください。"
                 )
 
-    selected_supplier = form_data["supplier"]
-    selected_material = form_data["material"]
-
-    chain_options = sheets.get_chain_options(
-        chain_rows,
-        supplier=selected_supplier,
-        material=selected_material,
-    )
-
-    # 素材未選択ならパーツ候補は空にせず、とりあえず「なし」のみ
-    if selected_material:
-        clasp_options = sheets.get_part_options(parts_rows, "引き輪", selected_material)
-        plate_options = sheets.get_part_options(
-            parts_rows, "プレート", selected_material
-        )
-        slide_options = sheets.get_part_options(
-            parts_rows, "スライド金具", selected_material
-        )
-    else:
-        clasp_options = ["なし"]
-        plate_options = ["なし"]
-        slide_options = ["なし"]
-
-    # 念のため「なし」が無ければ補う
-    if "なし" not in clasp_options:
-        clasp_options.insert(0, "なし")
-    if "なし" not in plate_options:
-        plate_options.insert(0, "なし")
-    if "なし" not in slide_options:
-        slide_options.insert(0, "なし")
-
-    # ヘッダー表示用の当日相場
+    # refresh時やGET時は result を出さない
+    # ヘッダー表示用の相場
     market_map = {}
     for row in market_rows:
         material = str(row.get("material", "")).strip()

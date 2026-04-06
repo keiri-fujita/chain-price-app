@@ -34,10 +34,12 @@
   <section class="card">
     <h2 class="card-title">入力</h2>
 
-    <form method="post" class="form-grid">
+    <form method="post" class="form-grid" id="calculator-form">
+      <input type="hidden" name="action" id="form-action" value="calculate" />
+
       <div class="form-row">
         <label for="supplier">仕入先</label>
-        <select id="supplier" name="supplier">
+        <select id="supplier" name="supplier" onchange="refreshOptions()">
           <option value="">選択してください</option>
           {% for supplier in supplier_options %}
             <option value="{{ supplier }}" {% if form_data.supplier == supplier %}selected{% endif %}>
@@ -52,7 +54,7 @@
 
       <div class="form-row">
         <label for="material">素材</label>
-        <select id="material" name="material">
+        <select id="material" name="material" onchange="refreshOptions()">
           <option value="">選択してください</option>
           {% for material in material_options %}
             <option value="{{ material }}" {% if form_data.material == material %}selected{% endif %}>
@@ -129,7 +131,13 @@
       </div>
 
       <div class="button-row">
-        <button type="submit" class="btn btn-primary">計算する</button>
+        <button
+          type="submit"
+          class="btn btn-primary"
+          onclick="setCalculateAction()"
+        >
+          計算する
+        </button>
         <a href="{{ url_for('calculator') }}" class="btn btn-secondary">リセット</a>
       </div>
     </form>
@@ -167,4 +175,18 @@
     </div>
   </section>
 </div>
+
+<script>
+  function refreshOptions() {
+    const actionInput = document.getElementById("form-action");
+    const form = document.getElementById("calculator-form");
+    actionInput.value = "refresh";
+    form.submit();
+  }
+
+  function setCalculateAction() {
+    const actionInput = document.getElementById("form-action");
+    actionInput.value = "calculate";
+  }
+</script>
 {% endblock %}
