@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import time
 from typing import Any
 
 import gspread
@@ -11,8 +12,18 @@ from config import Config, get_service_account_info
 class SheetsService:
     """
     Googleスプレッドシートから各マスタを読むためのサービス。
-    まずは「読むだけ」に責務を限定する。
+
+    実運用向けに以下を追加:
+    - 全マスタのTTLキャッシュ
+    - API失敗時は前回キャッシュを返す
     """
+
+    # プロセス内キャッシュ
+    _cache_data: dict[str, list[dict[str, Any]]] | None = None
+    _cache_expires_at: float = 0
+
+    # 何秒キャッシュするか
+    CACHE_TTL_SECONDS = 300
 
     def __init__(self, spreadsheet_id: str | None = None):
         self.spreadsheet_id = spreadsheet_id or Config.MASTER_SPREADSHEET_ID
@@ -34,16 +45,11 @@ class SheetsService:
         return self._spreadsheet
 
     def _get_records(self, sheet_name: str) -> list[dict[str, Any]]:
-        """
-        シートをヘッダー付きレコード一覧として取得する。
-        空行は除外する。
-        """
         worksheet = self._get_spreadsheet().worksheet(sheet_name)
         records = worksheet.get_all_records()
 
         cleaned = []
         for row in records:
-            # 全列空の行は捨てる
             if not any(str(v).strip() for v in row.values()):
                 continue
             cleaned.append(row)
@@ -51,11 +57,6 @@ class SheetsService:
 
     @staticmethod
     def _is_active(row: dict[str, Any]) -> bool:
-        """
-        active列がある場合のみ有効判定する。
-        TRUE / True / true / 1 を有効とみなす。
-        active列が無いシートは有効扱い。
-        """
         if "active" not in row:
             return True
 
@@ -80,10 +81,7 @@ class SheetsService:
     def get_app_settings(self) -> list[dict[str, Any]]:
         return self._get_records(Config.SHEET_APP_SETTINGS)
 
-    def get_all_masters(self) -> dict[str, list[dict[str, Any]]]:
-        """
-        計算画面に必要なマスタをまとめて返す。
-        """
+    def _fetch_all_masters_from_api(self) -> dict[str, list[dict[str, Any]]]:
         return {
             "chain_master": self.get_chain_master(),
             "labor_master": self.get_labor_master(),
@@ -91,6 +89,33 @@ class SheetsService:
             "market_master": self.get_market_master(),
             "app_settings": self.get_app_settings(),
         }
+
+    def get_all_masters(self, force_refresh: bool = False) -> dict[str, list[dict[str, Any]]]:
+        """
+        通常はキャッシュを返す。
+        TTL切れのときのみAPI再読込。
+        API失敗時は、古くてもキャッシュがあればそちらを返す。
+        """
+        now = time.time()
+
+        # まだ有効なキャッシュがあればそれを返す
+        if (
+            not force_refresh
+            and self.__class__._cache_data is not None
+            and now < self.__class__._cache_expires_at
+        ):
+            return self.__class__._cache_data
+
+        try:
+            data = self._fetch_all_masters_from_api()
+            self.__class__._cache_data = data
+            self.__class__._cache_expires_at = now + self.CACHE_TTL_SECONDS
+            return data
+        except Exception:
+            # API失敗時でも、過去キャッシュがあればそれで落ちないようにする
+            if self.__class__._cache_data is not None:
+                return self.__class__._cache_data
+            raise
 
     @staticmethod
     def get_supplier_options(chain_rows: list[dict[str, Any]]) -> list[str]:
@@ -107,10 +132,6 @@ class SheetsService:
         supplier: str = "",
         material: str = "",
     ) -> list[str]:
-        """
-        指定された仕入先・素材に合うチェーン種類(display_name)一覧を返す。
-        未選択のときは広めに返す。
-        """
         results = []
         for row in chain_rows:
             row_supplier = str(row.get("supplier", "")).strip()
@@ -134,17 +155,12 @@ class SheetsService:
         part_type: str,
         material: str,
     ) -> list[str]:
-        """
-        パーツのプルダウン候補を返す。
-        sort_order 昇順 → part_size で並べる。
-        """
         filtered = []
         for row in parts_rows:
             if str(row.get("part_type", "")).strip() != part_type:
                 continue
             if str(row.get("material", "")).strip() != material:
                 continue
-
             filtered.append(row)
 
         def sort_key(row: dict[str, Any]):
