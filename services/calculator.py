@@ -49,17 +49,31 @@ def format_yen(value: int | float | None) -> str:
     return f"¥{int(value):,}"
 
 
-def encode_cost(value: int) -> str:
+def encode_cost(cost: int) -> str:
     """
-    末尾ゼロの個数 + ゼロ以外の数字列
-    例:
-      12300   -> 20123
-      123000  -> 30123
+    下代を暗号化する。
+
+    例
+    17,220 → 101722
+    12,300 → 20123
+    98,700 → 20987
     """
-    s = str(int(value))
-    zero_count = len(s) - len(s.rstrip("0"))
-    significant = s.rstrip("0")
-    return f"{zero_count}{significant}" if significant else ""
+
+    s = str(cost)
+
+    zero_count = 0
+
+    for c in reversed(s):
+        if c == "0":
+            zero_count += 1
+        else:
+            break
+
+    significant = s[:-zero_count] if zero_count > 0 else s
+
+    prefix = str(zero_count * 10)
+
+    return prefix + significant
 
 
 def get_setting_value(settings_rows: list[dict[str, Any]], key: str) -> str:
