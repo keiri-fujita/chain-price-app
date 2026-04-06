@@ -66,7 +66,7 @@ select {
   max-width: var(--container);
   min-height: var(--header-height);
   margin: 0 auto;
-  padding: 16px 20px;
+  padding: 14px 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -75,7 +75,7 @@ select {
 
 .site-title {
   margin: 0;
-  font-size: 24px;
+  font-size: 22px;
   font-weight: 700;
   letter-spacing: 0.01em;
 }
@@ -95,7 +95,7 @@ select {
 .page-container {
   max-width: var(--container);
   margin: 0 auto;
-  padding: 24px 20px 32px;
+  padding: 18px 20px 24px;
 }
 
 .center-wrap {
@@ -110,7 +110,7 @@ select {
   border: 1px solid var(--border);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow);
-  padding: 28px;
+  padding: 22px;
 }
 
 .login-card {
@@ -119,14 +119,14 @@ select {
 }
 
 .card-title {
-  margin: 0 0 10px;
-  font-size: 24px;
+  margin: 0 0 12px;
+  font-size: 20px;
   font-weight: 700;
   line-height: 1.3;
 }
 
 .subtext {
-  margin: 0 0 22px;
+  margin: 0 0 18px;
   color: var(--muted);
   font-size: 14px;
   line-height: 1.6;
@@ -139,8 +139,8 @@ select {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  margin-bottom: 24px;
-  padding: 12px;
+  margin-bottom: 16px;
+  padding: 10px;
   border: 1px solid var(--border);
   border-radius: 18px;
   background: rgba(255, 255, 255, 0.9);
@@ -152,11 +152,11 @@ select {
   display: flex;
   align-items: center;
   gap: 8px;
-  min-height: 44px;
+  min-height: 40px;
   background: var(--card-soft);
   border: 1px solid var(--border);
   border-radius: 999px;
-  padding: 10px 14px;
+  padding: 8px 13px;
 }
 
 .market-label {
@@ -173,19 +173,19 @@ select {
 
 .layout-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
-  gap: 24px;
+  grid-template-columns: minmax(0, 1.15fr) minmax(300px, 0.85fr);
+  gap: 20px;
   align-items: start;
 }
 
 .form-grid {
   display: grid;
-  gap: 18px;
+  gap: 14px;
 }
 
 .form-row {
   display: grid;
-  gap: 8px;
+  gap: 6px;
 }
 
 label {
@@ -198,12 +198,12 @@ label {
 input,
 select {
   width: 100%;
-  min-height: 52px;
+  min-height: 44px;
   border: 1px solid var(--border);
   border-radius: var(--radius-ui);
   background: #fff;
-  padding: 13px 15px;
-  font-size: 16px;
+  padding: 10px 12px;
+  font-size: 15px;
   color: var(--text);
   appearance: none;
 }
@@ -224,19 +224,27 @@ select:focus {
   box-shadow: 0 0 0 4px rgba(188, 167, 223, 0.18);
 }
 
+select:invalid {
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--text);
+  border-color: #d6c7ee;
+  background: #fbf9ff;
+}
+
 .button-row {
   display: flex;
   gap: 12px;
   flex-wrap: wrap;
-  margin-top: 10px;
+  margin-top: 6px;
 }
 
 .btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 52px;
-  padding: 0 20px;
+  min-height: 44px;
+  padding: 0 18px;
   border-radius: var(--radius-ui);
   text-decoration: none;
   border: none;
@@ -244,7 +252,7 @@ select:focus {
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.01em;
-  min-width: 140px;
+  min-width: 132px;
 }
 
 .btn:active {
@@ -285,8 +293,8 @@ select:focus {
 }
 
 .alert {
-  margin-bottom: 18px;
-  padding: 13px 14px;
+  margin-bottom: 14px;
+  padding: 12px 14px;
   border-radius: 14px;
   font-size: 14px;
   line-height: 1.5;
@@ -307,35 +315,35 @@ select:focus {
 .result-card {
   align-self: start;
   position: sticky;
-  top: 156px;
+  top: 146px;
   background:
     linear-gradient(180deg, rgba(252, 250, 255, 0.96), rgba(255, 255, 255, 1));
 }
 
 .result-block {
-  padding: 18px 0;
+  padding: 12px 0;
   border-bottom: 1px solid #f0e9f8;
 }
 
 .result-block:first-child {
-  padding-top: 4px;
+  padding-top: 2px;
 }
 
 .result-block:last-of-type {
   border-bottom: none;
-  padding-bottom: 4px;
+  padding-bottom: 2px;
 }
 
 .result-label {
   font-size: 13px;
   color: var(--muted);
-  margin-bottom: 8px;
+  margin-bottom: 4px;
   font-weight: 600;
   letter-spacing: 0.02em;
 }
 
 .result-value {
-  font-size: clamp(30px, 4vw, 38px);
+  font-size: 30px;
   font-weight: 800;
   line-height: 1.15;
   word-break: break-word;
@@ -343,8 +351,8 @@ select:focus {
 }
 
 .encoded-cost {
-  margin-top: 24px;
-  padding-top: 8px;
+  margin-top: 16px;
+  padding-top: 6px;
   font-size: 13px;
   color: #aa9bbc;
   letter-spacing: 0.08em;
@@ -362,7 +370,7 @@ select:focus {
   }
 
   .card {
-    padding: 24px;
+    padding: 20px;
   }
 }
 
@@ -373,21 +381,21 @@ select:focus {
   }
 
   .page-container {
-    padding-top: 20px;
+    padding-top: 16px;
   }
 
   .result-value {
-    font-size: clamp(28px, 6vw, 34px);
+    font-size: 28px;
   }
 }
 
 @media (max-width: 640px) {
   .page-container {
-    padding: 16px 16px 28px;
+    padding: 14px 14px 24px;
   }
 
   .header-inner {
-    padding: 14px 16px;
+    padding: 12px 14px;
   }
 
   .site-title {
@@ -400,7 +408,7 @@ select:focus {
 
   .market-bar {
     top: 72px;
-    margin-bottom: 18px;
+    margin-bottom: 14px;
     padding: 10px;
     border-radius: 16px;
   }
@@ -412,22 +420,22 @@ select:focus {
   }
 
   .card {
-    padding: 20px 18px;
+    padding: 18px 16px;
     border-radius: 18px;
   }
 
   .card-title {
-    font-size: 22px;
+    font-size: 20px;
   }
 
   .form-grid {
-    gap: 16px;
+    gap: 12px;
   }
 
   input,
   select,
   .btn {
-    min-height: 50px;
+    min-height: 44px;
   }
 
   .button-row {
@@ -442,8 +450,4 @@ select:focus {
   .encoded-cost {
     text-align: left;
   }
-}
-
-.site-title {
-  color: red !important;
 }
