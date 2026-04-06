@@ -132,7 +132,14 @@ class SheetsService:
         supplier: str = "",
         material: str = "",
     ) -> list[str]:
+        """
+        指定された仕入先・素材に合うチェーン種類(display_name)一覧を返す。
+        スプレッドシートの行順をそのまま維持する。
+        重複があっても最初の1件だけ採用する。
+        """
         results = []
+        seen = set()
+
         for row in chain_rows:
             row_supplier = str(row.get("supplier", "")).strip()
             row_material = str(row.get("material", "")).strip()
@@ -144,10 +151,13 @@ class SheetsService:
                 continue
             if material and row_material != material:
                 continue
+            if display_name in seen:
+                continue
 
+            seen.add(display_name)
             results.append(display_name)
 
-        return sorted(set(results))
+        return results
 
     @staticmethod
     def get_part_options(
