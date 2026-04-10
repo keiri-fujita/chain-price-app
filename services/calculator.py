@@ -209,8 +209,10 @@ def calculate_chain_price(
     # 5. 最終下代を十円単位切り上げ
     rounded_cost = round_up_to_10(total_cost)
 
-    # 7. 税抜上代 = rounded_cost × markup_rate → 100円単位切り上げ
-    price_ex_tax = int(math.ceil((rounded_cost * markup_rate) / 100) * 100)
+    # 7. 税抜上代（500円境界で千円丸め）
+    price_ex_tax_raw = rounded_cost * markup_rate
+
+    price_ex_tax = int(math.floor((price_ex_tax_raw + 500) / 1000) * 1000)
 
     # 8. 税込上代 = 税抜上代 × tax_rate → 円未満切り捨て
     price_in_tax = floor_yen(price_ex_tax * tax_rate)
@@ -245,7 +247,7 @@ def calculate_chain_price(
             "total_cost": total_cost,
             "rounded_cost": rounded_cost,
             "markup_rate": markup_rate,
-            "price_ex_tax_raw": rounded_cost * markup_rate,
+            "price_ex_tax_raw": price_ex_tax_raw,
             "price_ex_tax_rounded": price_ex_tax,
             "tax_rate": tax_rate,
             "price_in_tax_final": price_in_tax,
