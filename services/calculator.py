@@ -194,22 +194,25 @@ def calculate_chain_price(
     markup_rate = to_float(get_setting_value(settings_rows, "markup_rate"))
     tax_rate = to_float(get_setting_value(settings_rows, "tax_rate"))
 
-    # チェーン本体下代
-    chain_cost = (weight_per_cm * length_cm * market_price) + labor_cost
+    # 1. チェーン本体下代
+    chain_cost = weight_per_cm * length_cm * market_price
 
-    # パーツ合計
+    # 2. 工賃下代
+    labor_total = weight_per_cm * labor_cost * length_cm
+
+    # 3. パーツ合計
     parts_total = clasp_price + plate_price + slide_price
 
-    # 最終下代
-    total_cost = chain_cost + parts_total
+    # 4. 最終下代
+    total_cost = chain_cost + labor_total + parts_total
 
-    # 十円単位切り上げ
+    # 5. 最終下代を十円単位切り上げ
     rounded_cost = round_up_to_10(total_cost)
 
-    # 税抜き上代
+    # 7. 税抜上代 = rounded_cost × markup_rate → 100円単位切り上げ
     price_ex_tax = int(math.ceil((rounded_cost * markup_rate) / 100) * 100)
 
-    # 税込み上代
+    # 8. 税込上代 = 税抜上代 × tax_rate → 円未満切り捨て
     price_in_tax = floor_yen(price_ex_tax * tax_rate)
 
     # 暗号化下代
@@ -230,6 +233,7 @@ def calculate_chain_price(
             "market_price": market_price,
             "labor_rank": labor_rank,
             "labor_cost": labor_cost,
+            "labor_total": labor_total,
             "clasp_size": clasp_size,
             "clasp_price": clasp_price,
             "plate_size": plate_size,
