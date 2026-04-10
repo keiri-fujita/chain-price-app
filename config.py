@@ -13,6 +13,7 @@ class Config:
 
     # 共通ログインパスワード
     APP_PASSWORD = os.getenv("APP_PASSWORD", "")
+    ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "")
 
     # Google スプレッドシートID
     MASTER_SPREADSHEET_ID = os.getenv("MASTER_SPREADSHEET_ID", "")

@@ -91,8 +91,16 @@ def login():
     if request.method == "POST":
         password = request.form.get("password", "")
 
+        # 管理者ログイン
+        if password and password == Config.ADMIN_PASSWORD:
+            session[Config.LOGIN_SESSION_KEY] = True
+            session["is_admin_debug"] = True
+            return redirect(url_for("calculator"))
+
+        # 一般ユーザーログイン
         if password and password == Config.APP_PASSWORD:
             session[Config.LOGIN_SESSION_KEY] = True
+            session["is_admin_debug"] = False
             return redirect(url_for("calculator"))
 
         error_message = "パスワードが違います。"
@@ -104,20 +112,6 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for("login"))
-
-
-@app.route("/debug-on")
-@login_required
-def debug_on():
-    session["is_admin_debug"] = True
-    return redirect(url_for("calculator"))
-
-
-@app.route("/debug-off")
-@login_required
-def debug_off():
-    session["is_admin_debug"] = False
-    return redirect(url_for("calculator"))
 
 
 @app.route("/calculator", methods=["GET", "POST"])
