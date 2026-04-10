@@ -8,7 +8,7 @@
     <span class="market-label">Pt</span>
     <span class="market-value">
       {% if market_map.get("Pt850") %}
-      ¥{{ "{:,}".format(market_map.get("Pt850")|int) }}/g
+      ¥{{ "{:,}".format(market_map.get("Pt850")|int) }}
       {% else %}
       -
       {% endif %}
@@ -18,7 +18,7 @@
     <span class="market-label">Au</span>
     <span class="market-value">
       {% if market_map.get("K18YG") %}
-      ¥{{ "{:,}".format(market_map.get("K18YG")|int) }}/g
+      ¥{{ "{:,}".format(market_map.get("K18YG")|int) }}
       {% else %}
       -
       {% endif %}
